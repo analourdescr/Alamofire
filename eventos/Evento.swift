@@ -35,6 +35,9 @@ class Evento {
             if let fecha = acf.value(forKey: "fecha") as? String{
                 self.fecha = fecha
             }
+            if let flyer = acf.value(forKey: "flyer")as? String{
+                
+            }
         }
         self.urlFlyer = "urlFlyer"
     }

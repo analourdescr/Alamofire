@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -54,6 +55,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let celda = tableView.dequeueReusableCell(withIdentifier: "cellEvento") as? CeldaEventoController
         celda?.lblNombre.text = eventos[indexPath.row].nombre
         celda?.lblFecha.text = eventos[indexPath.row].fecha
+        
+        AF.request(eventos[indexPath.row].urlFlyer).responseImage{
+            response in
+            switch(response.result){
+            case.success(let data): celda?.imgFlyer.image = data
+            case.failure(_): print("Algo salio mal.")
+            }
+        }
         
         return celda!
     }
