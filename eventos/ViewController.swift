@@ -13,23 +13,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var eventos : [Evento] = []
 
+    @IBOutlet weak var tvNombreEvento: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AF.request("http://localhost:8888/eventos/wp-json/v2/eventos").responseJSON{
+        AF.request("http://localhost:8888/eventos/wp-json/wp/v2/eventos/").responseJSON{
             response in
-            switch(response.result){
+        switch(response.result){
             case.success(let datos) :
                 if let arregloEventos = datos as? NSArray {
                     for evento in arregloEventos{
                         if let diccionarioEvento = evento as? NSDictionary {
-                            let nuevoEvento = Evento(diccionar: diccionarioEvento)
+                            let nuevoEvento = Evento(diccionario: diccionarioEvento)
                             self.eventos.append(nuevoEvento)
                         }
                     }
+                    self.tvNombreEvento.reloadData()
                 }
-            case.failure(let datos) : print("")
-            default : break
+        case.failure(_) :
+            print("Algo salio mal.")
+            
             }
         }
     }
@@ -41,6 +44,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eventos.count
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 160.5
+    }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let celda = tableView.dequeueReusableCell(withIdentifier: "cellEvento") as? CeldaEventoController
